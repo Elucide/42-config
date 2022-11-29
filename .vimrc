@@ -1,3 +1,11 @@
+
+"   ██    ██ ██ ███    ███ ██████   ██████
+"   ██    ██ ██ ████  ████ ██   ██ ██
+"   ██    ██ ██ ██ ████ ██ ██████  ██
+"    ██  ██  ██ ██  ██  ██ ██   ██ ██
+"██   ████   ██ ██      ██ ██   ██  ██████
+
+
 set linebreak
 set nowrap
 set ruler
@@ -22,9 +30,9 @@ command! W :w
 command! WQ :wq
 command! Wq :wq
 :set termwinsize=30x200
+set scrolloff=3
 
 let mapleader=" "
-
 
 nnoremap <leader>o gT
 nnoremap <leader>p gt
@@ -45,10 +53,26 @@ iabbrev strlen int	ft_strlen(char *str)<enter>{<enter>int	i;<enter><enter>i = 0;
 
 nnoremap <leader>h I#ifndef <c-r>%<esc>gUaWelr_A<cr># define <c-r>%<esc>gUaWelr_A<cr><cr>#endif<esc>
 
+"if &term =~ '256color'
+    " disable Background Color Erase (BCE) so that color schemes
+    " render properly when inside 256-color tmux and GNU screen.
+    " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+"    set t_ut=
+"endif
 
+"""""""""""""""""""""""""""""""""""""""""""""
+"              		 VIMPLUG 
+"""""""""""""""""""""""""""""""""""""""""""""
+
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 onoremap ii ?if (<cr>jjdi{kkf(lci(
 call plug#begin()
+	Plug 'edkolev/tmuxline.vim'
 	Plug 'sainnhe/edge'
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
@@ -56,6 +80,10 @@ call plug#begin()
 	Plug 'morhetz/gruvbox'
 	Plug 'prabirshrestha/vim-lsp'
 	Plug 'jeaye/color_coded'
+	Plug 'sainnhe/everforest'
+	Plug 'myusuf3/numbers.vim'
+	Plug 'scrooloose/syntastic'
+	Plug 'ntpeters/vim-airline-colornum'
 "	Plug 'chilledheart/vim-clangd'
 call plug#end()
 
@@ -65,19 +93,21 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""
 
 " Important!!
-if has('termguicolors')
-	set termguicolors
-endif
+"if has('termguicolors')
+"	set termguicolors
+"endif
 " The configuration options should be placed before `colorscheme edge`.
-let g:edge_style = 'aura'
-let g:edge_better_performance = 1
-set bg=dark
-colorscheme edge
+"let g:edge_style = 'aura'
+"let g:edge_better_performance = 0
+"let g:edge_cursor = 'purple'
+"set bg=dark
+"colorscheme edge
 
 """""""""""""""""""""""""""""""""""""""""""""
 "              		  GRUVBOX
 """""""""""""""""""""""""""""""""""""""""""""
 
+"g:gruvbox_contrast = medium
 "colorscheme gruvbox
 "set bg=dark
 "augroup BgHighlight
@@ -90,8 +120,8 @@ colorscheme edge
 "              		  AIRLINE
 """""""""""""""""""""""""""""""""""""""""""""
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline_theme='gruvbox'
-let g:airline_theme='edge'
+"let g:airline_theme='edge'
+let g:airline_theme='everforest'
 
 """""""""""""""""""""""""""""""""""""""""""""
 "              		 NERDTREE 
@@ -113,3 +143,37 @@ nmap <Leader>r :NERDTreeFocus<cr>R<c-w><c-p>
 """""""""""""""""""""""""""""""""""""""""""""
 let g:color_coded_enabled = 1
 let g:color_coded_filetypes = ['c', 'cpp', 'objc']
+
+"""""""""""""""""""""""""""""""""""""""""""""
+"              		  EVERFOREST
+"""""""""""""""""""""""""""""""""""""""""""""
+
+if has('termguicolors')
+	set termguicolors
+endif
+" The configuration options should be placed before `colorscheme edge`.
+set background=dark
+let g:everforest_background = 'hard'
+colorscheme everforest
+
+
+"""""""""""""""""""""""""""""""""""""""""""""
+"              		  SYNTASTIC
+"""""""""""""""""""""""""""""""""""""""""""""
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+
+"""""""""""""""""""""""""""""""""""""""""""""
+"              		  CURSORLINE
+"""""""""""""""""""""""""""""""""""""""""""""
+let g:airline_colornum_enabled = 1
+set cursorline
+"hi clear CursorLine
